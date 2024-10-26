@@ -5,10 +5,11 @@ import { JsonPipe, Location } from '@angular/common';
 import { thMobile } from '../../../shared/validators/th-mobile.validator';
 import { ItemService } from '../../item.service';
 import { ItemStatus } from '../../models/item';
-import { CanComponentDeactivate } from '../../../auth/guards/can-deactivate.guard';
 import { Observable } from 'rxjs';
-import { BsModalService, BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
+import { ActivatedRoute } from '@angular/router';
+import { CanComponentDeactivate } from '../../../auth/guards/can-deactivate.guard';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-item-form',
@@ -17,23 +18,22 @@ import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/
   templateUrl: './item-form.component.html',
   styleUrl: './item-form.component.scss'
 })
-export class ItemFormComponent implements OnInit, CanComponentDeactivate {
+export class ItemFormComponent implements OnInit ,CanComponentDeactivate{
 
-  // add
   @Input()
   id: number | null = null;
 
+  // injects
   location = inject(Location);
-
   fb = inject(NonNullableFormBuilder)
-
   itemService = inject(ItemService)
+  route = inject(ActivatedRoute);
 
   // formControls
   title = this.fb.control<string>('', { validators: Validators.required });
   contactMobileNo = this.fb.control<string>('', { validators: [Validators.required, thMobile] });
-  amount = this.fb.control<number>(null!, { validators: [Validators.required, Validators.min(1)] });
-  price = this.fb.control<number>(null!, { validators: [Validators.required, Validators.min(0.5)] });
+  amount = this.fb.control<number>(0, { validators: [Validators.required, Validators.min(1)] });
+  price = this.fb.control<number>(0, { validators: [Validators.required, Validators.min(0.5)] });
 
   // formGroup
   fg = this.fb.group({
@@ -43,23 +43,26 @@ export class ItemFormComponent implements OnInit, CanComponentDeactivate {
     price: this.price
   })
 
-  // add 
-  modalService = inject(BsModalService)
-  bsModalRef?: BsModalRef;
-
   ngOnInit() {
-    console.log('id', this.id) // ???
+    this.id = +this.route.snapshot.paramMap.get('id')!
+    console.log('id', this.id)
     if (this.id) {
+      console.log("true")
       this.itemService.get(this.id).subscribe(v => this.fg.patchValue(v))
     }
   }
-    
+
+
   onBack(): void {
     this.location.back();
   }
 
+  modalService = inject(BsModalService)
+  bsModalRef?: BsModalRef;
+  
   onSubmit(): void {
-    const item = {...this.fg.getRawValue(), status: ItemStatus.PENDING };
+    const item = {...this.fg.getRawValue() };
+    console.log(item)
     if (this.id) {
       this.itemService.edit(this.id, item).subscribe(() => this.onBack());
     } else {
@@ -68,6 +71,7 @@ export class ItemFormComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate(): boolean | Observable<boolean> {
+    console.log('canDeactivate')
     // check is dirty-form
     const isFormDirty = this.fg.dirty
     console.log('isFormDirty', isFormDirty)

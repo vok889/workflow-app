@@ -1,13 +1,13 @@
 <!-- item-enrty.component.html -->
 <h3 class="m-4">Item Entry</h3>
 <app-budget-plan />
-<hr />
+<!-- <hr />
 <div class="bg-body-tertiary">
   <h6>debugging</h6>
   isSmallTable: {{ isSmallTable }}
 </div>
 
-<hr />
+<hr /> -->
 <div class="row">
   <div class="col">
     <div class="form-check">
@@ -30,7 +30,6 @@
     />
   </div>
 </div>
-<hr />
 
 <hr />
 <div class="d-flex justify-content-end mb-3">
@@ -57,8 +56,8 @@
         </td>
         <td>{{ item.id }}</td>
         <td>{{ item.title }}</td> 
-        <td class="text-end pe-5">{{ item.price | number:'1.2-2' }}</td>
-        <td class="text-end pe-5">{{ item.amount | number:'1.2-2' }}</td>
+        <td class="text-end pe-5">{{ item.price | number:'1.4-4' }}</td>
+        <td class="text-end pe-5">{{ item.amount }}</td>
         <td class="text-center">{{ item.contactMobileNo | mobileFormat }}</td>
         <td class="text-center">{{ item.status }}</td>
       </tr>

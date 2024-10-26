@@ -17,7 +17,7 @@ export class NavbarComponent {
   
   menus = [
     { path: 'budget/item-entry', title: 'Entry' },
-    { path: 'budget/item-approval', title: 'Approval' }
+    { path: 'budget/item-approval', title: 'Approval&Reject' }
   ]
 
   // add

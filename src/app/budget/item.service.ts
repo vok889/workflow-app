@@ -1,7 +1,7 @@
 // item.service.ts
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { CreateItem, EditIem, Item, ItemStatus } from './models/item';
+import { CreateItem, EditItem, Item, ItemStatus } from './models/item';
 import { ENV_CONFIG } from '../env.config';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class ItemService {
     return this.httpClient.post<Item>(this.URL, item);
   }
 
-  edit(id: number, item: EditIem) {
+  edit(id: number, item: EditItem) {
     return this.httpClient.patch<Item>(`${this.URL}/${id}`, item);
   }
 
