@@ -1,0 +1,7 @@
+.angular
+.vscode
+dist
+public
+
+*.md
+*.json
